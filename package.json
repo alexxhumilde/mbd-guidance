@@ -12,6 +12,8 @@
     "./legacy-scanner": "./src/legacy-scanner.mjs"
   },
   "files": [
+    "LICENSE",
+    "CONTRIBUTING.md",
     "assets/",
     "bin/",
     "src/",

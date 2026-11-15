@@ -299,3 +299,11 @@ When running directly inside this repository, the root shortcuts also work: `nod
 ```sh
 npm test
 ```
+
+---
+
+## Contributing & License
+
+Found an outdated `discord.js` pattern, missing API v10 feature, or false positive in `legacy-scan`? Read [CONTRIBUTING.md](CONTRIBUTING.md) or open an issue on [GitHub](https://github.com/alexxhumilde/mbd-guidance/issues).
+
+This project is licensed under the [Apache License 2.0](LICENSE).
