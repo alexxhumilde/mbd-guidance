@@ -1,0 +1,12 @@
+{
+  "name": "mbd-guidance",
+  "description": "MBD Guidance is an agent skill and zero-dependency CLI tool designed to help AI coding agents build, modernize, and audit Discord bots using modern Discord API v10, discord.js v14.28.1+, Components V2, Serverless HTTP Interactions (Ed25519), and secure Web Dashboard integration rather than outdated v12/v13 workarounds.",
+  "version": "1.0.0",
+  "author": {
+    "name": "alexxhumilde"
+  },
+  "license": "Apache-2.0",
+  "skills": [
+    "./skills/mbd-guidance/"
+  ]
+}

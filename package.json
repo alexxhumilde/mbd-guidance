@@ -18,8 +18,16 @@
     "scripts/",
     "schemas/",
     "skills/",
+    "policies/",
     "plugin.json",
     "gemini-extension.json",
+    "kimi.plugin.json",
+    ".agents/",
+    ".claude-plugin/",
+    ".codex-plugin/",
+    ".cursor-plugin/",
+    ".github/plugin/",
+    ".grok-plugin/",
     "README.md"
   ],
   "scripts": {

@@ -22,11 +22,13 @@ If the request is ambiguous between Guidance/Modernize vs Full Audit, ask one co
 
 ---
 
-## Invocation Path
+## Invocation Path (`<SKILL_DIR>`)
 
-Run the zero-dependency local CLI (100% offline):
-- Inside this repository or locally linked: `node ./bin/mbd-guidance.mjs <command>` (or `npm run <command> -- ...`).
-- Globally installed package: `mbd-guidance <command>` (or `npx -y mbd-guidance@latest <command>`).
+Let `<SKILL_DIR>` be the absolute directory containing this `SKILL.md` file (or `skills/mbd-guidance` when running directly from the `mbd-guidance` repository root). Run the self-contained, zero-dependency CLI offline from any project directory:
+
+- Self-contained skill CLI: `node "<SKILL_DIR>/scripts/mbd-guidance.mjs" <command>`
+- Self-contained audit validator: `node "<SKILL_DIR>/scripts/validate-audit-report.mjs" <path-to-findings.json>`
+- Repository / globally linked shortcut: `node ./bin/mbd-guidance.mjs <command>` or `mbd-guidance <command>`
 
 ---
 
@@ -36,17 +38,17 @@ Run the zero-dependency local CLI (100% offline):
 Run `search` with a **2–5 word query** targeting a single Discord platform capability (`<verb/pattern> + <Discord primitive>`), omitting app-specific names:
 
 ```sh
-node ./bin/mbd-guidance.mjs search "<query>"
+node "<SKILL_DIR>/scripts/mbd-guidance.mjs" search "<query>"
 ```
 
 - **Match found**: Proceed directly to `retrieve` for matching `id`(s).
-- **Weak/empty results**: Rephrase once using concrete Discord terms (`components-v2`, `ephemeral`, `defer`, `ed25519`, `slash`, `autocomplete`, `custom_id`, `sweepers`, `sharding`) or run `list`.
+- **Weak/empty results**: Rephrase once using concrete Discord terms (`components-v2`, `ephemeral`, `defer`, `ed25519`, `slash`, `autocomplete`, `custom_id`, `sweepers`, `sharding`, `oauth2`, `ipc`) or run `list`.
 
 ### Step 2. Retrieve Best Practices
 Fetch full guide(s) by comma-separated IDs:
 
 ```sh
-node ./bin/mbd-guidance.mjs retrieve "<id1,id2>"
+node "<SKILL_DIR>/scripts/mbd-guidance.mjs" retrieve "<id1,id2>"
 ```
 
 If `--spill-large` writes output exceeding 9.5 KB to a temporary file, read that file path using your file-reading tool.
@@ -71,7 +73,7 @@ When asked to detect deprecated code or upgrade an existing bot:
 
 1. **Scan**: Run the deterministic static scanner:
    ```sh
-   node ./bin/mbd-guidance.mjs legacy-scan <path> --json
+   node "<SKILL_DIR>/scripts/mbd-guidance.mjs" legacy-scan <path> --json
    ```
 2. **Triage (`keepWhen` / `dropWhen`)**: Evaluate every finding against its `keepWhen` / `dropWhen` rubric by inspecting the real source lines. Drop false positives (e.g., non-Discord Node `EventEmitter` listeners or upstream Ed25519 router middleware).
 3. **Retrieve & Modernize**: Retrieve each confirmed finding's `guideId` (`retrieve "<guideId>"`) and apply the modern replacement without breaking registered commands.
@@ -88,10 +90,10 @@ For full Discord bot audits, follow [AUDIT-WORKFLOW.md](playbooks/AUDIT-WORKFLOW
 - [ARCHITECTURE-AND-SCALING.md](playbooks/ARCHITECTURE-AND-SCALING.md) — Minimal intents, `makeCache`, `sweepers`, non-blocking event loop, rate limits, and `ShardingManager`.
 - [WEB-DASHBOARD-INTEGRATION.md](playbooks/WEB-DASHBOARD-INTEGRATION.md) — OAuth2 guild authorization, `BigInt` permissions, IDOR prevention, Redis Pub/Sub / IPC sync, and REST caching.
 
-Every confirmed finding in `findings.json` must cross a concrete **trust boundary** backed by verified source evidence and pass validation before delivery:
+Every confirmed finding in `findings.json` must cross a concrete **trust boundary** backed by verified source evidence and pass validation against [schemas/audit-report.schema.json](schemas/audit-report.schema.json) before delivery:
 
 ```sh
-node ./scripts/validate-audit-report.mjs <path-to-findings.json>
+node "<SKILL_DIR>/scripts/validate-audit-report.mjs" <path-to-findings.json>
 ```
 
 ---

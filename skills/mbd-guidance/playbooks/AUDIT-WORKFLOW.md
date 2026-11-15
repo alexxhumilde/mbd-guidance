@@ -2,11 +2,13 @@
 
 Follow these 4 phases exclusively in **Mode 3 (Full Bot Audit Mode)** to deliver a deterministic, traceable, source-verified audit.
 
+Let `<SKILL_DIR>` be the directory containing `SKILL.md`.
+
 ## Phase 1: Reconnaissance & Surface Inventory
 
 1. Run the deterministic scanner as a baseline:
    ```sh
-   node ./bin/mbd-guidance.mjs legacy-scan <target> --json
+   node "<SKILL_DIR>/scripts/mbd-guidance.mjs" legacy-scan <target> --json
    ```
 2. Inventory the repository:
    - **Runtime & stack**: `package.json`, `discord.js` version, Gateway vs Serverless HTTP Interactions model.
@@ -36,9 +38,9 @@ For each candidate (including `legacy-scan` results):
 
 ## Phase 4: Report Generation & Schema Validation (`findings.json` + `AUDIT-REPORT.md`)
 
-1. Write `findings.json` conforming to [schemas/audit-report.schema.json](../../../schemas/audit-report.schema.json).
+1. Write `findings.json` conforming to [schemas/audit-report.schema.json](../schemas/audit-report.schema.json).
 2. Validate `findings.json` with the deterministic validator script:
    ```sh
-   node ./scripts/validate-audit-report.mjs <path-to-findings.json>
+   node "<SKILL_DIR>/scripts/validate-audit-report.mjs" <path-to-findings.json>
    ```
 3. Only after the validator exits with code `0`, deliver the executive summary and remediation plan referencing the corresponding `mbd-guidance` `guideId`s.

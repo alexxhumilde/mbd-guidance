@@ -14,6 +14,9 @@ import { validateAuditReport } from '../scripts/validate-audit-report.mjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..');
 const CLI_PATH = path.join(REPO_ROOT, 'bin', 'mbd-guidance.mjs');
+const SKILL_DIR = path.join(REPO_ROOT, 'skills', 'mbd-guidance');
+const SKILL_CLI_PATH = path.join(SKILL_DIR, 'scripts', 'mbd-guidance.mjs');
+const SKILL_VALIDATOR_PATH = path.join(SKILL_DIR, 'scripts', 'validate-audit-report.mjs');
 
 test('catalog loads all 13 guides with valid frontmatter', () => {
   const catalog = loadCatalog();
@@ -236,4 +239,112 @@ test('CLI commands list, search, retrieve, and legacy-scan execute cleanly', () 
     encoding: 'utf8',
   });
   assert.match(retrieveOut, /ContainerBuilder/);
+});
+
+test('self-contained skill scripts run cleanly from an external workspace copy (npx skills simulation)', () => {
+  const tmpWorkspace = fs.mkdtempSync(path.join(os.tmpdir(), 'mbd-standalone-skill-'));
+
+  try {
+    const copiedSkillDir = path.join(tmpWorkspace, '.agents', 'skills', 'mbd-guidance');
+    fs.cpSync(SKILL_DIR, copiedSkillDir, { recursive: true });
+
+    const copiedCli = path.join(copiedSkillDir, 'scripts', 'mbd-guidance.mjs');
+    const copiedValidator = path.join(copiedSkillDir, 'scripts', 'validate-audit-report.mjs');
+
+    const botSamplePath = path.join(tmpWorkspace, 'bot.js');
+    fs.writeFileSync(
+      botSamplePath,
+      'const { MessageEmbed } = require("discord.js");\nconst e = new MessageEmbed();\n',
+      'utf8'
+    );
+
+    const listOut = execFileSync(process.execPath, [copiedCli, 'list', '--json'], {
+      cwd: tmpWorkspace,
+      encoding: 'utf8',
+    });
+    assert.equal(JSON.parse(listOut).length, 13);
+
+    const searchOut = execFileSync(process.execPath, [copiedCli, 'search', 'oauth2 dashboard'], {
+      cwd: tmpWorkspace,
+      encoding: 'utf8',
+    });
+    assert.equal(JSON.parse(searchOut)[0].id, 'oauth2-dashboard-guild-auth');
+
+    const retrieveOut = execFileSync(process.execPath, [copiedCli, 'retrieve', 'web-bot-sync-and-ipc'], {
+      cwd: tmpWorkspace,
+      encoding: 'utf8',
+    });
+    assert.match(retrieveOut, /timingSafeEqual/);
+
+    const scanOut = execFileSync(process.execPath, [copiedCli, 'legacy-scan', botSamplePath, '--json'], {
+      cwd: tmpWorkspace,
+      encoding: 'utf8',
+    });
+    const scanData = JSON.parse(scanOut);
+    assert.equal(scanData.findings[0].ruleId, 'MBD001');
+
+    const findingsFile = path.join(tmpWorkspace, 'findings.json');
+    fs.writeFileSync(
+      findingsFile,
+      JSON.stringify({
+        schemaVersion: '1.0.0',
+        botName: 'standalone-test-bot',
+        ecosystem: 'gateway',
+        auditedAt: '2026-11-14T18:40:00.000Z',
+        coverage: ['legacy-bot/commands'],
+        findings: [
+          {
+            id: 'F-001',
+            severity: 'low',
+            status: 'confirmed',
+            category: 'legacy-migration',
+            title: 'Legacy MessageEmbed constructor in standalone test',
+            trustBoundary: 'bot-builder -> discord-gateway',
+            evidence: { file: 'bot.js', line: 2, snippet: 'const e = new MessageEmbed();' },
+            remediation: 'Replace MessageEmbed with EmbedBuilder or Components V2 ContainerBuilder.',
+            guideId: 'v13-to-v14-modernization',
+          },
+        ],
+      }),
+      'utf8'
+    );
+
+    const validatorOut = execFileSync(process.execPath, [copiedValidator, findingsFile], {
+      cwd: tmpWorkspace,
+      encoding: 'utf8',
+    });
+    assert.match(validatorOut, /Audit report valid/);
+  } finally {
+    fs.rmSync(tmpWorkspace, { recursive: true, force: true });
+  }
+});
+
+test('all multi-agent plugin and marketplace manifests are valid JSON', () => {
+  const manifestPaths = [
+    'plugin.json',
+    'gemini-extension.json',
+    'kimi.plugin.json',
+    '.agents/plugins/marketplace.json',
+    '.claude-plugin/plugin.json',
+    '.claude-plugin/marketplace.json',
+    '.codex-plugin/plugin.json',
+    '.cursor-plugin/plugin.json',
+    '.github/plugin/plugin.json',
+    '.grok-plugin/marketplace.json',
+    'skills/mbd-guidance/schemas/audit-report.schema.json',
+  ];
+
+  for (const relPath of manifestPaths) {
+    const absPath = path.join(REPO_ROOT, relPath);
+    assert.ok(fs.existsSync(absPath), `expected manifest ${relPath} to exist`);
+    const parsed = JSON.parse(fs.readFileSync(absPath, 'utf8'));
+    assert.ok(parsed && typeof parsed === 'object', `expected ${relPath} to parse to an object`);
+  }
+
+  assert.ok(
+    fs.existsSync(path.join(REPO_ROOT, 'policies', 'mbd-guidance.toml')),
+    'expected Gemini CLI policy file to exist'
+  );
+  assert.ok(fs.existsSync(SKILL_CLI_PATH));
+  assert.ok(fs.existsSync(SKILL_VALIDATOR_PATH));
 });

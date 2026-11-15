@@ -1,0 +1,15 @@
+{
+  "name": "alexxhumilde",
+  "description": "Modern Discord Bot development, modernization, web dashboard integration, and security audit guidance for AI coding agents.",
+  "owner": {
+    "name": "alexxhumilde"
+  },
+  "plugins": [
+    {
+      "name": "mbd-guidance",
+      "source": "./",
+      "description": "Keep your coding agent up to date with modern Discord API v10, discord.js v14.28.1+, Components V2, Web Dashboard Integration, and bot security audit best practices",
+      "version": "1.0.0"
+    }
+  ]
+}

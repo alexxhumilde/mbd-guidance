@@ -1,13 +1,16 @@
 {
-  "name": "mbd-guidance-plugin",
-  "displayName": "Modern Discord Bot Guidance",
-  "description": "Keep your coding agent up to date with modern Discord API v10, discord.js v14.28+, Components V2, Rich Modals, HTTP Interactions, and bot security audit best practices.",
-  "logo": "assets/logo.png",
-  "suggestedPrompts": [
-    "Audit this Discord bot project for legacy patterns, security boundaries, and architecture issues",
-    "Implement a paginated command response using Discord Components V2 and stateful custom IDs",
-    "Build a serverless Discord HTTP Interactions handler with Ed25519 signature verification"
-  ],
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "mbd-guidance",
+  "version": "1.0.0",
+  "description": "Keep your coding agent up to date with modern Discord API v10, discord.js v14.28.1+, Components V2, Rich Modals, HTTP Interactions, Web Dashboard Integration, and bot security audit best practices.",
+  "author": {
+    "name": "alexxhumilde",
+    "url": "https://github.com/alexxhumilde"
+  },
+  "homepage": "https://github.com/alexxhumilde/mbd-guidance#readme",
+  "repository": "https://github.com/alexxhumilde/mbd-guidance",
+  "license": "Apache-2.0",
+  "icon": "./assets/logo.png",
   "keywords": [
     "discord",
     "discord-bot",
@@ -15,11 +18,8 @@
     "interactions",
     "components-v2",
     "ed25519",
+    "web-dashboard",
     "security-audit",
     "best-practices"
-  ],
-  "homepage": "https://github.com/alexxhumilde/mbd-guidance#readme",
-  "repository": "https://github.com/alexxhumilde/mbd-guidance",
-  "license": "Apache-2.0",
-  "version": "1.0.0"
+  ]
 }
