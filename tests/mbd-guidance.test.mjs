@@ -54,6 +54,7 @@ test('searchGuides ranks expected guides in top results', () => {
     ['nextjs oauth2 dashboard guild permissions', 'oauth2-dashboard-guild-auth'],
     ['sync web dashboard bot redis ipc', 'web-bot-sync-and-ipc'],
     ['cache discord rest channels web', 'web-discord-rest-caching'],
+    ['modal file upload label builder', 'modals-and-autocomplete'],
   ];
 
   for (const [query, expectedId] of queries) {
@@ -77,7 +78,7 @@ test('getGuideById retrieves full guide by id or category/id slug', () => {
   assert.equal(bySlug.id, 'http-interactions-ed25519');
 });
 
-test('legacy-scanner detects MBD001-MBD012 and spares clean modern code', () => {
+test('legacy-scanner detects MBD001-MBD013 and spares clean modern code', () => {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mbd-scan-test-'));
 
   try {
@@ -92,7 +93,8 @@ client.on('ready', () => console.log('online'));
 client.on('message', async (message) => {
   if (message.content.startsWith('!ping')) {
     const args = message.content.slice(5);
-    const embed = new MessageEmbed().setTitle('Pong');
+    const pins = await message.channel.messages.fetchPinned();
+    const embed = new MessageEmbed().setTitle(\`Pong \${pins.size}\`);
     const row = new MessageActionRow().addComponents(new MessageButton());
     await message.reply(\`Pong \${args}\`);
   }

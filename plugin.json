@@ -1,7 +1,8 @@
 {
   "name": "mbd-guidance-plugin",
   "displayName": "Modern Discord Bot Guidance",
-  "description": "Keep your coding agent up to date with modern Discord API v10, discord.js v14+, Components V2, HTTP Interactions, and bot security audit best practices.",
+  "description": "Keep your coding agent up to date with modern Discord API v10, discord.js v14.28+, Components V2, Rich Modals, HTTP Interactions, and bot security audit best practices.",
+  "logo": "assets/logo.png",
   "suggestedPrompts": [
     "Audit this Discord bot project for legacy patterns, security boundaries, and architecture issues",
     "Implement a paginated command response using Discord Components V2 and stateful custom IDs",

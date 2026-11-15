@@ -36,6 +36,11 @@ const DISCORD_SYNONYMS = {
   sync: ['ipc', 'redis', 'pubsub', 'dashboard', 'webhook'],
   ipc: ['sync', 'redis', 'pubsub', 'sharding', 'dashboard'],
   redis: ['sync', 'ipc', 'pubsub', 'cache', 'sharding'],
+  fileupload: ['modal', 'labelbuilder', 'fileuploadbuilder', 'getuploadedfiles'],
+  labelbuilder: ['modal', 'addlabelcomponents', 'textinputbuilder', 'fileuploadbuilder'],
+  fetchpinned: ['fetchpins', 'pins', 'v14', 'migration'],
+  fetchpins: ['fetchpinned', 'pins', 'v14', 'migration'],
+  pins: ['fetchpins', 'fetchpinned', 'migration'],
 };
 
 /**

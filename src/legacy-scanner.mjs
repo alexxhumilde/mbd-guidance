@@ -193,6 +193,16 @@ export const LEGACY_RULES = [
         line
       ),
   },
+  {
+    ruleId: 'MBD013',
+    severity: 'warning',
+    guideId: 'v13-to-v14-modernization',
+    description: 'Deprecated `messages.fetchPinned()` method (superseded by paginated `messages.fetchPins()` in discord.js v14.22+).',
+    replacement: 'Replace `.fetchPinned()` with `.fetchPins()` and iterate `response.items` or paginate as needed.',
+    keepWhen: 'Called on a discord.js `MessageManager` (`channel.messages.fetchPinned()`).',
+    dropWhen: 'Method belongs to a custom non-Discord repository or cache abstraction.',
+    matchLine: (line) => /\.\s*fetchPinned\s*\(/.test(line),
+  },
 ];
 
 /**

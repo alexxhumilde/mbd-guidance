@@ -1,6 +1,10 @@
+<p align="center">
+  <img src="./assets/logo.png" alt="MBD Guidance Logo" width="160" />
+</p>
+
 # MBD Guidance — Modern Discord Bot Guidance & Audit Skill
 
-**MBD Guidance** is a zero-dependency local CLI and hybrid AI agent skill focused on modern development, legacy migration, and security/architecture audits for **Discord bots** (`discord.js` v14+, `@discordjs/rest`, and **Serverless HTTP Interactions** on Cloudflare Workers / Next.js).
+**MBD Guidance** is a zero-dependency local CLI and hybrid AI agent skill focused on modern development, legacy migration, and security/architecture audits for **Discord bots** (`discord.js` v14.28.1, `@discordjs/rest`, and **Serverless HTTP Interactions** on Cloudflare Workers / Next.js).
 
 It combines two proven architectures:
 1. **`googlechrome/modern-web-guidance` pattern**: Offline CLI with weighted BM25 search (`search`), full guide retrieval (`retrieve`), catalog listing (`list`), and static anti-pattern scanning (`legacy-scan`) with `keepWhen` / `dropWhen` triage rubrics.
@@ -11,11 +15,12 @@ It combines two proven architectures:
 ## Project Architecture
 
 ```text
+├── assets/logo.png                  # Skill & plugin logo
 ├── bin/mbd-guidance.mjs             # Main CLI (search, retrieve, list, legacy-scan)
 ├── src/
 │   ├── catalog.mjs                  # Recursive Markdown guide loader & frontmatter parser
 │   ├── search-engine.mjs            # Weighted BM25 ranking + Discord domain synonyms
-│   └── legacy-scanner.mjs           # Static scanner with 10 deterministic rules (MBD001–MBD010)
+│   └── legacy-scanner.mjs           # Static scanner with 13 deterministic rules (MBD001–MBD013)
 ├── scripts/
 │   └── validate-audit-report.mjs    # Deterministic validator for findings.json audit reports
 ├── schemas/
@@ -61,13 +66,13 @@ node ./scripts/validate-audit-report.mjs ./findings.json
 | :--- | :--- | :--- |
 | `ui-components` | `components-v2-layout` | `MessageFlags.IsComponentsV2`, `ContainerBuilder`, `SectionBuilder`, `TextDisplayBuilder`, 40-component cap |
 | `ui-components` | `slash-commands-and-options` | `SlashCommandBuilder`, `InteractionContextType`, `ApplicationIntegrationType`, idempotent REST sync |
-| `ui-components` | `modals-and-autocomplete` | `ModalBuilder` (5-row cap), `showModal()` without prior defer, `isAutocomplete()` < 500 ms |
+| `ui-components` | `modals-and-autocomplete` | `ModalBuilder` (`LabelBuilder`, `FileUploadBuilder`, Selects, Radio/Checkbox) & `isAutocomplete()` < 500 ms |
 | `ui-components` | `ephemeral-and-defer-lifecycle` | 3-second deadline (`10062`), `MessageFlags.Ephemeral`, `deferReply` vs `deferUpdate` |
 | `ui-components` | `stateful-custom-ids-and-pagination` | Structured `custom_id` (`<= 100` chars), `ownerId` validation, clean collector timeouts |
-| `legacy-migration` | `v13-to-v14-modernization` | Full v12/v13 -> v14.16+ equivalence table (`EmbedBuilder`, `GatewayIntentBits`, `Events`, `ChannelType`) |
+| `legacy-migration` | `v13-to-v14-modernization` | Full v12/v13 -> v14.28.1 equivalence table (`EmbedBuilder`, `GatewayIntentBits`, `Events`, `fetchPins()`) |
 | `legacy-migration` | `prefix-to-interactions` | Migrating `!prefix` commands and dropping privileged `MessageContent` intent |
 | `security` | `http-interactions-ed25519` | Web Crypto Ed25519 verification over `rawBody`, `PING` handling, serverless `waitUntil()` |
-| `security` | `permissions-and-mention-safety` | `allowedMentions`, moderation role hierarchy, least privilege, `guildId` tenant isolation |
+| `security` | `permissions-and-mention-safety` | `allowedMentions`, `appPermissions`, moderation role hierarchy, least privilege, `guildId` isolation |
 | `architecture` | `cache-sweepers-and-sharding` | `Options.cacheWithLimits`, `sweepers`, non-blocking event loop, `ShardingManager` |
 | `web-integration` | `oauth2-dashboard-guild-auth` | OAuth2 `identify` + `guilds`, 64-bit `BigInt` `ManageGuild` checks, IDOR prevention |
 | `web-integration` | `web-bot-sync-and-ipc` | Shared DB + Redis Pub/Sub invalidation or `timingSafeEqual` loopback HTTP IPC |
@@ -75,7 +80,7 @@ node ./scripts/validate-audit-report.mjs ./findings.json
 
 ---
 
-## `legacy-scan` Rules (MBD001 – MBD012)
+## `legacy-scan` Rules (MBD001 – MBD013)
 
 | Rule | Severity | Detects | Guide |
 | :--- | :--- | :--- | :--- |
@@ -91,6 +96,7 @@ node ./scripts/validate-audit-report.mjs ./findings.json
 | `MBD010` | `error` | Potential hardcoded bot tokens in source code | `permissions-and-mention-safety` |
 | `MBD011` | `error` | Public frontend env vars (`NEXT_PUBLIC_*`, `VITE_*`, `REACT_APP_*`) exposing bot tokens | `oauth2-dashboard-guild-auth` |
 | `MBD012` | `warning` | 32-bit bitwise permission checks on `guild.permissions` instead of `BigInt` | `oauth2-dashboard-guild-auth` |
+| `MBD013` | `warning` | Deprecated `messages.fetchPinned()` instead of paginated `messages.fetchPins()` | `v13-to-v14-modernization` |
 
 ---
 

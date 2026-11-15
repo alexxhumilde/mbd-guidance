@@ -3,9 +3,9 @@ id: permissions-and-mention-safety
 title: Permissions, Role Hierarchy & Mention Injection Safety
 category: security
 description: Enforce least privilege with PermissionFlagsBits, prevent role hierarchy bypasses in moderation commands, eliminate @everyone/@here mention injection via allowedMentions, and isolate multi-tenant guild data.
-tags: [security, permissions, PermissionFlagsBits, allowedMentions, hierarchy, moderation, mentions, token, multi-tenant, guildId]
+tags: [security, permissions, PermissionFlagsBits, appPermissions, allowedMentions, hierarchy, moderation, mentions, token, multi-tenant, guildId]
 apiVersion: v10
-ecosystems: [discord.js v14+, Discord API v10]
+ecosystems: [discord.js v14.28+, Discord API v10]
 ---
 
 Discord bots operate as privileged proxies across thousands of guilds. Untrusted user inputs and administrative commands cross real trust boundaries.
@@ -21,7 +21,7 @@ Discord bots operate as privileged proxies across thousands of guilds. Untrusted
    - The executor (`interaction.member`) holds a strictly higher role than the target (`targetMember.roles.highest.comparePositionTo(executor.roles.highest) < 0`), unless the executor is `guild.ownerId`.
    - The bot itself can act on the target (`targetMember.bannable` / `targetMember.moderatable` / `targetMember.kickable`).
    - `targetMember.id !== guild.ownerId` and `targetMember.id !== interaction.user.id`.
-3. **Least privilege**: Avoid demanding `PermissionFlagsBits.Administrator` for normal or moderation commands; request exact capabilities (`ManageMessages`, `ModerateMembers`, `ManageRoles`).
+3. **Least privilege & resolved `appPermissions` (`14.28+`)**: Avoid demanding `PermissionFlagsBits.Administrator` for normal or moderation commands; request exact capabilities (`ManageMessages`, `ModerateMembers`, `ManageRoles`). Check `interaction.appPermissions` (or interaction-scoped `channel.appPermissions` in `discord.js v14.28.0+` / `v14.28.1`) before attempting channel sends, thread operations, or message deletions in user-installed or restricted channels.
 4. **Strict `guildId` multi-tenant isolation**: Scope every database read and mutation using `interaction.guildId` from the verified interaction payload—never trust a guild ID supplied via command text options or unverified `custom_id` fields.
 5. **Zero hardcoded secrets**: Never commit literal tokens in `client.login('...')`; load `process.env.DISCORD_TOKEN` and rotate any leaked token immediately.
 

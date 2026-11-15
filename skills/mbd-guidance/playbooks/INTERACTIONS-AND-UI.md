@@ -21,12 +21,14 @@ Use this playbook when designing or auditing Discord interactive flows (Slash Co
    - Do `ThumbnailBuilder` and `MediaGalleryItemBuilder` include accessible descriptions via `setDescription`?
    - Related guide: `components-v2-layout`.
 
-4. **Modals & Autocomplete**
+4. **Rich Modals & Autocomplete (`discord.js` v14.23+ – v14.28.1)**
    - Is `showModal()` invoked as the initial acknowledgment without calling `deferReply()` beforehand?
+   - On `discord.js >= 14.23`, do modals use `addLabelComponents()` (`LabelBuilder`) and `addTextDisplayComponents()` instead of deprecated `addComponents()`, leveraging `FileUploadBuilder`, Select Menus, `RadioGroupBuilder`, or `CheckboxGroupBuilder` where appropriate?
    - Do `isAutocomplete()` handlers respond within < 500 ms using cached data, capping results at `<= 25` choices and strings `<= 100` chars?
    - Related guide: `modals-and-autocomplete`.
 
-5. **Component State (`custom_id`)**
+5. **Component State (`custom_id`) & Message Helpers**
    - Do buttons and select menus encode minimal state in `custom_id` (`<= 100` chars) using `namespace:action:ownerId:...`?
    - Does the handler verify `interaction.user.id === ownerId` before mutating state or paginating?
-   - Related guide: `stateful-custom-ids-and-pagination`.
+   - Are pinned messages fetched via `channel.messages.fetchPins()` (`14.22.0+`) instead of deprecated `fetchPinned()`?
+   - Related guide: `stateful-custom-ids-and-pagination`, `v13-to-v14-modernization`.

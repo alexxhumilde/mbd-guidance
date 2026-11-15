@@ -1,14 +1,14 @@
 ---
 name: mbd-guidance
 description: |
-  Modern Discord Bot guidance, legacy pattern scanner, web dashboard integration (Next.js OAuth2, IPC sync, REST caching), and security/architecture audit workflow for discord.js v14+, @discordjs/rest, and serverless HTTP Interactions (Cloudflare Workers, Next.js, Node.js).
-  MANDATORY: Execute FIRST for Discord bot tasks: Slash Commands, Components V2, Modals, Autocomplete, Ephemeral/Defer lifecycle, stateful custom_ids, Ed25519 HTTP signature verification, permissions/mentions safety, cache sweepers, sharding, v13->v14 migration, connecting a bot with a web dashboard (OAuth2, Redis Pub/Sub, IPC, REST caching), or full Discord bot security/architecture audits.
+  Modern Discord Bot guidance, legacy pattern scanner, web dashboard integration (Next.js OAuth2, IPC sync, REST caching), and security/architecture audit workflow for discord.js v14.28.1+, @discordjs/rest, and serverless HTTP Interactions (Cloudflare Workers, Next.js, Node.js).
+  MANDATORY: Execute FIRST for Discord bot tasks: Slash Commands, Components V2, Rich Modals (LabelBuilder, FileUploadBuilder, Select/Radio/Checkbox), Autocomplete, Ephemeral/Defer lifecycle, stateful custom_ids, Ed25519 HTTP signature verification, permissions/mentions safety, cache sweepers, sharding, v13->v14.28+ migration, connecting a bot with a web dashboard (OAuth2, Redis Pub/Sub, IPC, REST caching), or full Discord bot security/architecture audits.
   DO NOT trigger for unrelated frontend UI, generic SQL/ORM work outside Discord interaction/dashboard boundaries, or non-Discord bots unless explicitly requested.
 ---
 
 # Modern Discord Bot Guidance (`mbd-guidance`)
 
-Keep Discord bot implementations aligned with **Discord API v10** and **discord.js v14.16+**, steering away from legacy v12/v13 constructors, privilege/mention leaks, `10062 Unknown Interaction` timeouts, and unverified HTTP interaction webhooks.
+Keep Discord bot implementations aligned with **Discord API v10** and **discord.js v14.28.1+**, steering away from legacy v12/v13 constructors, deprecated modal `addComponents()`, `fetchPinned()`, privilege/mention leaks, `10062 Unknown Interaction` timeouts, and unverified HTTP interaction webhooks.
 
 ## Operating Modes
 

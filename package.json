@@ -12,6 +12,7 @@
     "./legacy-scanner": "./src/legacy-scanner.mjs"
   },
   "files": [
+    "assets/",
     "bin/",
     "src/",
     "scripts/",

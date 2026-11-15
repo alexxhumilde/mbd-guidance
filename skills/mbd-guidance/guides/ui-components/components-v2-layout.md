@@ -3,9 +3,9 @@ id: components-v2-layout
 title: Discord Components V2 Layout (Containers, Sections, TextDisplay & Media)
 category: ui-components
 description: Build rich structured Discord message layouts using Components V2 (MessageFlags.IsComponentsV2, ContainerBuilder, SectionBuilder, TextDisplayBuilder, SeparatorBuilder, ThumbnailBuilder, MediaGalleryBuilder) instead of legacy embeds.
-tags: [components-v2, ContainerBuilder, SectionBuilder, TextDisplayBuilder, SeparatorBuilder, ThumbnailBuilder, MediaGalleryBuilder, IsComponentsV2, MessageFlags, embeds, ui]
+tags: [components-v2, ContainerBuilder, SectionBuilder, TextDisplayBuilder, SeparatorBuilder, ThumbnailBuilder, MediaGalleryBuilder, IsComponentsV2, MessageFlags, withComponents, webhooks, embeds, ui]
 apiVersion: v10
-ecosystems: [discord.js v14.19+, Discord API v10]
+ecosystems: [discord.js v14.28+, Discord API v10]
 ---
 
 Use **Components V2** (`MessageFlags.IsComponentsV2`) for structured dashboard cards, status panels, receipts, and rich interactive messages instead of stacking legacy `EmbedBuilder` + `content`.
@@ -121,5 +121,7 @@ For serverless handlers without builders (e.g., Cloudflare Workers / Next.js):
 
 ## Fallback & Compatibility
 
+- **Webhooks & `withComponents: true` (`14.19.1+`)**: When sending interactive components through an external `WebhookClient` without `IsComponentsV2`, pass `withComponents: true` in `WebhookMessageCreateOptions` so Discord does not strip components on non-application-owned webhooks.
+- **Preserved flags on edit (`14.19.0+`)**: `MessagePayload` preserves existing message flags automatically on edits, so follow-up `editReply()` calls on a V2 message must continue sending V2 components.
 - If your project is pinned to `discord.js` `< 14.19` and cannot upgrade yet, fall back to `EmbedBuilder` (max 25 `fields`) and do not mix `IsComponentsV2` with `embeds`.
 - Always provide `.setDescription(...)` alt text on `ThumbnailBuilder` and `MediaGalleryItemBuilder` for accessibility.
