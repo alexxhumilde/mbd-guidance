@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MBD Guidance Discord Bot Audit Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "botName",
+    "ecosystem",
+    "auditedAt",
+    "coverage",
+    "findings"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "botName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ecosystem": {
+      "type": "string",
+      "enum": ["gateway", "http-interactions", "hybrid"]
+    },
+    "auditedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "coverage": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "severity",
+          "status",
+          "category",
+          "title",
+          "trustBoundary",
+          "evidence",
+          "remediation",
+          "guideId"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^F-[0-9]{3,}$"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low", "info"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["confirmed", "needs_validation", "rejected"]
+          },
+          "category": {
+            "type": "string",
+            "enum": ["security", "ui-components", "legacy-migration", "architecture", "web-integration"]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 5
+          },
+          "trustBoundary": {
+            "type": "string",
+            "minLength": 5
+          },
+          "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["file", "line", "snippet"],
+            "properties": {
+              "file": { "type": "string", "minLength": 1 },
+              "line": { "type": "integer", "minimum": 1 },
+              "snippet": { "type": "string", "minLength": 1 }
+            }
+          },
+          "remediation": {
+            "type": "string",
+            "minLength": 5
+          },
+          "guideId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

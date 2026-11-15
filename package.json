@@ -1,0 +1,48 @@
+{
+  "name": "mbd-guidance",
+  "version": "1.0.0",
+  "description": "Modern Discord Bot Guidance & Security Audit skill CLI (zero-dependency BM25 search, guide retrieval, legacy scanner, and audit validator).",
+  "type": "module",
+  "bin": {
+    "mbd-guidance": "./bin/mbd-guidance.mjs"
+  },
+  "exports": {
+    "./catalog": "./src/catalog.mjs",
+    "./search": "./src/search-engine.mjs",
+    "./legacy-scanner": "./src/legacy-scanner.mjs"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "scripts/",
+    "schemas/",
+    "skills/",
+    "plugin.json",
+    "gemini-extension.json",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test tests/mbd-guidance.test.mjs",
+    "search": "node ./bin/mbd-guidance.mjs search",
+    "retrieve": "node ./bin/mbd-guidance.mjs retrieve",
+    "list": "node ./bin/mbd-guidance.mjs list",
+    "legacy-scan": "node ./bin/mbd-guidance.mjs legacy-scan",
+    "validate-report": "node ./scripts/validate-audit-report.mjs"
+  },
+  "keywords": [
+    "discord",
+    "discord-bot",
+    "discord.js",
+    "interactions",
+    "components-v2",
+    "security-audit",
+    "agent-skill",
+    "guidance"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "homepage": "https://github.com/alexxhumilde/mbd-guidance#readme",
+  "repository": "https://github.com/alexxhumilde/mbd-guidance",
+  "license": "Apache-2.0"
+}

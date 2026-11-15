@@ -1,0 +1,24 @@
+{
+  "name": "mbd-guidance-plugin",
+  "displayName": "Modern Discord Bot Guidance",
+  "description": "Keep your coding agent up to date with modern Discord API v10, discord.js v14+, Components V2, HTTP Interactions, and bot security audit best practices.",
+  "suggestedPrompts": [
+    "Audit this Discord bot project for legacy patterns, security boundaries, and architecture issues",
+    "Implement a paginated command response using Discord Components V2 and stateful custom IDs",
+    "Build a serverless Discord HTTP Interactions handler with Ed25519 signature verification"
+  ],
+  "keywords": [
+    "discord",
+    "discord-bot",
+    "discordjs",
+    "interactions",
+    "components-v2",
+    "ed25519",
+    "security-audit",
+    "best-practices"
+  ],
+  "homepage": "https://github.com/alexxhumilde/mbd-guidance#readme",
+  "repository": "https://github.com/alexxhumilde/mbd-guidance",
+  "license": "Apache-2.0",
+  "version": "1.0.0"
+}
